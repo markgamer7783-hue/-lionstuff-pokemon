@@ -4,11 +4,51 @@
 :root{--bg:#101a17;--p:#1b2a25;--p2:#263b31;--line:#496456;--g:#91d66e;--txt:#f2f0d8;--muted:#b7c8bc}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#14231d,#0c1412);color:var(--txt);font:16px system-ui}header{position:sticky;top:0;background:#14231df2;border-bottom:2px solid var(--line);z-index:5}.top,main{max-width:1150px;margin:auto;padding:14px 18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:1.3rem;font-weight:900;color:var(--g)}nav{display:flex;gap:6px;flex-wrap:wrap}button{background:var(--p2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-weight:700;cursor:pointer}button:hover{border-color:var(--g)}button:disabled{opacity:.5}.tab.active{background:var(--g);color:#132018}.panel,.card{background:var(--p);border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.between{justify-content:space-between}h1{font-size:1.65rem}h1,h2,h3{margin:0 0 12px}h2{color:var(--g);font-size:1.2rem}p{color:var(--muted);line-height:1.45}input,select{width:100%;padding:10px;background:#0e1813;color:var(--txt);border:1px solid var(--line);border-radius:8px}label{display:block;color:var(--muted);margin:9px 0 5px}.hidden{display:none!important}.sprite{width:115px;height:115px;object-fit:contain;image-rendering:pixelated}.smallSprite{width:65px;height:65px;object-fit:contain;image-rendering:pixelated}.tag{display:inline-block;background:#344c40;border-radius:20px;padding:4px 8px;margin:3px;font-size:.8rem}.muted{color:var(--muted)}.small{font-size:.85rem}.dexlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:7px;max-height:460px;overflow:auto}.dexitem{display:flex;align-items:center;gap:7px;text-align:left}.dexitem img{width:44px;height:44px;object-fit:contain;image-rendering:pixelated}.battlefield{height:300px;position:relative;overflow:hidden;border:4px solid #d4d1a9;border-radius:12px;background:linear-gradient(#b7d9c1 0 48%,#91b87e 48% 72%,#557b49 72%);color:#17221a}.ground{position:absolute;border-radius:50%;background:#527b4a;opacity:.6;width:38%;height:65px;bottom:20px;left:10%}.ground.enemy{left:auto;right:8%;top:40px;bottom:auto;width:34%;height:60px}.battlesprite{position:absolute;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 5px 3px #0005)}.playerpoke{width:175px;height:175px;left:14%;bottom:15px}.enemypoke{width:140px;height:140px;right:14%;top:8px}.badge{position:absolute;background:#17241ddd;color:white;padding:7px 10px;border-radius:8px;top:9px;left:9px}.badge.right{left:auto;right:9px}.hp{height:12px;background:#111;border:1px solid #607266;border-radius:20px;overflow:hidden;min-width:110px}.hp>div{height:100%;background:#70d36d;transition:width .3s}.moves{display:grid;grid-template-columns:1fr 1fr;gap:8px}.move{min-height:75px;text-align:left;color:#171717;border:3px solid #ffffff66}.move strong,.move span{display:block}.move span{font-size:.78rem}.type-normal{background:#c6c2a5}.type-fire{background:#f18a4b}.type-water{background:#6da9ed}.type-electric{background:#f4d85b}.type-grass{background:#8acb68}.type-ice{background:#8bd9d5}.type-fighting{background:#ce6b5c}.type-poison{background:#b57acb}.type-ground{background:#d7b56a}.type-flying{background:#a9a0e8}.type-psychic{background:#ee83aa}.type-bug{background:#b7c94e}.type-rock{background:#b8a16a}.type-ghost{background:#8c7ac5}.type-dragon{background:#8269db}.type-dark{background:#82716b}.type-steel{background:#a9b9c5}.type-fairy{background:#e9a6cf}
 @media(max-width:600px){.playerpoke{width:130px;height:130px}.enemypoke{width:105px;height:105px}.battlefield{height:255px}}
+
+.pokeball{display:inline-block;vertical-align:-5px;width:21px;height:21px;border:2px solid #111;border-radius:50%;background:linear-gradient(to bottom,#e94343 0 46%,#222 46% 55%,#f4f4ec 55% 100%);position:relative;margin-right:5px}.pokeball:after{content:'';position:absolute;width:6px;height:6px;border:2px solid #222;border-radius:50%;background:#f4f4ec;left:5px;top:5px}.onboard{max-width:760px;margin:12px auto}.starterGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-top:14px}.starterChoice{background:#203129;border:2px solid #496456;border-radius:12px;padding:10px;text-align:center;cursor:pointer}.starterChoice.selected{border-color:#91d66e;background:#304a38;box-shadow:0 0 0 2px #91d66e55}.starterChoice img{width:100px;height:100px;object-fit:contain;image-rendering:pixelated}.starterChoice b{display:block}.starterChoice small{color:#b7c8bc}.stepPill{display:inline-block;background:#344c40;border-radius:20px;padding:5px 10px;margin:0 5px 10px 0;font-size:.82rem}.field{margin:10px 0}.field input{margin-top:5px}.error{color:#ff9b9b}.success{color:#a9e68b}
 </style></head><body>
-<header><div class="top"><div class="brand">⚡ LIONSTUFF POKÉMON</div><nav>
+<header><div class="top"><div class="brand"><span class="pokeball"></span> LIONSTUFF POKÉMON</div><nav>
 <button class="tab active" data-page="profile">Profil</button><button class="tab" data-page="play">Spielen</button><button class="tab" data-page="box">Box</button><button class="tab" data-page="trade">Tauschen</button><button class="tab" data-page="dex">Pokédex</button><button class="tab" data-page="rank">Ranglisten</button>
 </nav></div></header><main>
-<section id="profile" class="page"><div class="panel"><h1>Trainerprofil</h1><div id="profileContent"></div></div><div class="grid"><div class="panel"><h2>Dein Team</h2><div id="team"></div></div><div class="panel"><h2>PokéAPI-Daten</h2><p id="dataStatus">Daten werden geladen …</p><p class="small">Pokémon-Daten und Trainer-Spielstand werden getrennt gespeichert.</p></div></div></section>
+<section id="profile" class="page">
+<div class="panel">
+  <h1>Trainerprofil</h1>
+  <div id="profileContent"></div>
+  <div id="accountStep" class="onboard hidden">
+    <span class="stepPill">Schritt 1 von 2</span>
+    <h2>Deinen Trainer erstellen</h2>
+    <p>Lege deinen Trainernamen und ein Passwort fest. Danach kannst du deinen Starter auswählen.</p>
+    <div class="field"><label for="accountName">Trainername</label><input id="accountName" autocomplete="username" placeholder="Dein Trainername"></div>
+    <div class="field"><label for="accountPassword">Passwort</label><input id="accountPassword" type="password" autocomplete="new-password" placeholder="Mindestens 8 Zeichen"></div>
+    <div class="field"><label for="accountPassword2">Passwort wiederholen</label><input id="accountPassword2" type="password" autocomplete="new-password" placeholder="Passwort wiederholen"></div>
+    <button id="createAccount">Trainer erstellen</button>
+    <p id="accountMessage" class="small"></p>
+  </div>
+  <div id="loginStep" class="onboard hidden">
+    <h2>Willkommen zurück!</h2>
+    <p>Gib dein Passwort ein, um deinen lokalen Trainer-Spielstand zu öffnen.</p>
+    <div class="field"><label for="loginPassword">Passwort</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
+    <button id="loginButton">Einloggen</button>
+    <p id="loginMessage" class="small"></p>
+  </div>
+  <div id="starterStep" class="onboard hidden">
+    <span class="stepPill">Schritt 2 von 2</span>
+    <h2>Wähle deinen Starter</h2>
+    <p>Wähle einen Starter aus den Generationen 1 bis 9. Du siehst Sprite, Namen und Generation. Dein Pokémon startet auf Level 5.</p>
+    <label for="starterGeneration">Generation</label>
+    <select id="starterGeneration">
+      <option value="1">Generation 1 – Kanto</option><option value="2">Generation 2 – Johto</option><option value="3">Generation 3 – Hoenn</option><option value="4">Generation 4 – Sinnoh</option><option value="5">Generation 5 – Einall</option><option value="6">Generation 6 – Kalos</option><option value="7">Generation 7 – Alola</option><option value="8">Generation 8 – Galar</option><option value="9">Generation 9 – Paldea</option>
+    </select>
+    <div id="starterChoices" class="starterGrid"></div>
+    <p id="starterMessage" class="small"></p>
+    <button id="confirmStarter" disabled>Dieses Pokémon wählen</button>
+  </div>
+</div>
+<div id="profileExtras" class="grid">
+  <div class="panel"><h2>Dein Team</h2><div id="team"></div></div>
+  <div class="panel"><h2>PokéAPI-Daten</h2><p id="dataStatus">Daten werden geladen …</p><p class="small">Pokémon-Daten und Trainer-Spielstand werden getrennt gespeichert.</p></div>
+</div>
+</section>
 <section id="play" class="page hidden"><div class="panel"><h1>Spielen</h1><div class="grid"><div class="card"><h2>Kämpfe</h2><p>Zufälliger Trainingskampf.</p><button id="start">Random Kampf</button></div><div class="card"><h2>Gemeinsam erkunden</h2><p>Online-Erkundung als spätere Erweiterung.</p><button disabled>Demnächst</button></div><div class="card"><h2>Arena / Live-Arena</h2><p>Arenaleiter und Rangkämpfe.</p><button disabled>Demnächst</button></div><div class="card"><h2>Raid / Dungeon</h2><p>Besondere Begegnungen.</p><button disabled>Demnächst</button></div></div></div>
 <div id="battle" class="panel hidden"><div class="row between"><h2>Pokémon-Kampf</h2><span id="bstate" class="tag">Level 5</span></div><div class="battlefield"><div class="ground"></div><div class="ground enemy"></div><div class="badge" id="enemyTrainer">Gegner</div><div class="badge right" id="myTrainer">Trainer</div><img id="enemySprite" class="battlesprite enemypoke"><img id="mySprite" class="battlesprite playerpoke"></div>
 <div class="grid" style="margin-top:12px"><div class="card"><b id="enemyName">Gegner</b><p id="enemyLevel">Level 5</p><div class="row">KP <div class="hp"><div id="enemyBar"></div></div><span id="enemyHP"></span></div></div><div class="card"><b id="myName">Dein Pokémon</b><p id="myLevel">Level 5</p><div class="row">KP <div class="hp"><div id="myBar"></div></div><span id="myHP"></span></div></div></div><h3>Attacke wählen</h3><div id="moves" class="moves"></div><p id="log" aria-live="polite"></p><button id="leave">Kampf verlassen</button></div></section>
@@ -19,7 +59,11 @@
 </main>
 <script>
 const API='https://pokeapi.co/api/v2/',KEY='lionstuffTrainerDemo',DEXKEY='lionstuffDexList',LIMIT=1025;
-const $=id=>document.getElementById(id);let trainer=readTrainer(),dex=[],cache={},fight=null;
+const $=id=>document.getElementById(id);let trainer=readTrainer(),dex=[],cache={},fight=null,selectedStarter=null;
+const ACCOUNT_KEY='lionstuffAccountDemo';
+const STARTERS={
+1:[1,4,7],2:[152,155,158],3:[252,255,258],4:[387,390,393],5:[495,498,501],6:[650,653,656],7:[722,725,728],8:[810,813,816],9:[906,909,912]
+};
 function readTrainer(){try{let p=JSON.parse(localStorage.getItem(KEY)||'null');if(p){p.coins=Number(p.coins??500);p.team=p.team||[];if(p.starter)p.starter.level=Math.max(5,Number(p.starter.level)||5);return p}}catch(e){}return null}
 function save(){if(trainer)localStorage.setItem(KEY,JSON.stringify(trainer))}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -29,9 +73,78 @@ const sprite=(id,back=false)=>`https://raw.githubusercontent.com/PokeAPI/sprites
 async function pokemon(id){let k=String(id).toLowerCase();if(cache[k])return cache[k];let d=await api('pokemon/'+k),s=await api('pokemon-species/'+d.id),chain=await api(s.evolution_chain.url);let p={id:d.id,name:d.name,de:s.names.find(x=>x.language.name==='de')?.name||d.name,types:d.types.sort((a,b)=>a.slot-b.slot).map(x=>x.type.name),stats:Object.fromEntries(d.stats.map(x=>[x.stat.name,x.base_stat])),abilities:d.abilities.map(x=>({name:x.ability.name,hidden:x.is_hidden})),moves:d.moves,sprite:d.sprites.front_default,back:d.sprites.back_default||sprite(d.id,true),front:d.sprites.front_default||sprite(d.id),species:s,evolution:chain.chain};cache[k]=cache[d.id]=p;return p}
 function chainNames(n,a=[]){a.push(n.species.name);n.evolves_to.forEach(x=>chainNames(x,a));return a}
 async function initDex(){try{let d=await cached(DEXKEY,API+'pokemon?limit='+LIMIT+'&offset=0');dex=d.results.slice(0,LIMIT).map((x,i)=>({id:i+1,name:x.name}));$('dexStatus').textContent=dex.length+' Pokémon aus der PokéAPI geladen. Details werden beim Öffnen geladen.';renderDex()}catch(e){$('dexStatus').textContent='PokéAPI nicht erreichbar. Bitte später neu laden.'}}
-function renderProfile(){if(!trainer){$('profileContent').innerHTML=`<p>Erstelle deinen Trainer. Ein vorhandener Spielstand wird automatisch übernommen, sofern er unter dem bisherigen Speicherschlüssel liegt.</p><div class="grid"><div><label>Trainername</label><input id="trainerName" placeholder="Dein Name"></div><div><label>Starter (Pokédex-Nummer oder englischer Name)</label><input id="starter" value="1"></div></div><button id="create" style="margin-top:12px">Trainer erstellen</button>`;$('create').onclick=createTrainer;$('team').textContent='Noch kein Team.';return}
-let s=trainer.starter||{};$('profileContent').innerHTML=`<div class="row"><div><span class="tag">Trainer</span><h2>${esc(trainer.name||'Trainer')}</h2><p>${trainer.coins} Münzen</p></div><img class="sprite" src="${sprite(s.id||1)}"><div><h2 id="starterName">${esc(s.name||s.pokemon||'Starter')}</h2><div id="starterTypes">Daten werden geladen …</div><p>Level ${s.level||5}</p></div></div>`;$('team').innerHTML=`<div class="row"><img class="smallSprite" src="${sprite(s.id||1)}"><div><b>${esc(s.name||'Starter')}</b><p>Level ${s.level||5}</p></div></div>`;pokemon(s.id||s.name||1).then(p=>{$('starterName').textContent=p.de;$('starterTypes').innerHTML=p.types.map(t=>`<span class="tag">${t}</span>`).join('')}).catch(()=>{})}
-async function createTrainer(){let n=$('trainerName').value.trim(),v=$('starter').value.trim();if(!n||!v)return alert('Bitte Name und Starter eingeben.');try{let p=await pokemon(v);trainer={name:n,coins:500,starter:{id:p.id,name:p.de,level:5,moves:[]},team:[]};save();renderProfile()}catch(e){alert('Pokémon nicht gefunden. Bitte eine gültige Pokédex-Nummer oder einen englischen Namen eingeben.')}}
+function accountData(){try{return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'null')}catch(e){return null}}
+function showOnboarding(){
+ $('profileExtras').classList.add('hidden');
+ $('profileContent').classList.add('hidden');
+ const acc=accountData();
+ if(!acc){$('accountStep').classList.remove('hidden');$('loginStep').classList.add('hidden');$('starterStep').classList.add('hidden');if(trainer?.name)$('accountName').value=trainer.name;$('accountMessage').textContent=trainer?.starter?'Dein vorhandener Trainer-Spielstand bleibt erhalten. Lege jetzt ein Passwort dafür fest.':''}
+ else if(!sessionStorage.getItem('lionstuffLoggedIn')){$('accountStep').classList.add('hidden');$('loginStep').classList.remove('hidden');$('starterStep').classList.add('hidden')}
+ else if(!trainer?.starter){$('accountStep').classList.add('hidden');$('loginStep').classList.add('hidden');$('starterStep').classList.remove('hidden');renderStarterChoices()}
+}
+async function hashPassword(password,salt){
+ const enc=new TextEncoder(),key=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);
+ const bits=await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:120000,hash:'SHA-256'},key,256);
+ return [...new Uint8Array(bits)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function createAccount(){
+ const name=$('accountName').value.trim(),pw=$('accountPassword').value,pw2=$('accountPassword2').value;
+ if(!name||pw.length<8||pw!==pw2){$('accountMessage').className='small error';$('accountMessage').textContent='Bitte einen Namen eingeben, ein Passwort mit mindestens 8 Zeichen wählen und beide Passwörter identisch eingeben.';return}
+ const salt=crypto.getRandomValues(new Uint8Array(16));const saltHex=[...salt].map(x=>x.toString(16).padStart(2,'0')).join('');
+ const hash=await hashPassword(pw,saltHex);
+ localStorage.setItem(ACCOUNT_KEY,JSON.stringify({name,salt:saltHex,hash,createdAt:Date.now()}));
+ if(!trainer)trainer={name,coins:500,starter:null,team:[]};trainer.name=name;save();sessionStorage.setItem('lionstuffLoggedIn','yes');
+ $('accountStep').classList.add('hidden');if(trainer.starter)renderProfile();else{$('starterStep').classList.remove('hidden');renderStarterChoices();}
+}
+async function login(){
+ const acc=accountData(),pw=$('loginPassword').value;
+ if(!acc)return;
+ const hash=await hashPassword(pw,acc.salt);
+ if(hash!==acc.hash){$('loginMessage').className='small error';$('loginMessage').textContent='Das Passwort stimmt nicht.';return}
+ sessionStorage.setItem('lionstuffLoggedIn','yes');trainer=readTrainer();
+ $('loginStep').classList.add('hidden');
+ if(!trainer?.starter){if(!trainer)trainer={name:acc.name,coins:500,starter:null,team:[]};$('starterStep').classList.remove('hidden');renderStarterChoices()}
+ else renderProfile();
+}
+async function renderStarterChoices(){
+ const gen=Number($('starterGeneration').value),ids=STARTERS[gen];
+ selectedStarter=null;
+ $('confirmStarter').disabled=true;
+ $('starterMessage').textContent='Lade Pokémon-Sprites …';
+ $('starterChoices').innerHTML=ids.map(id=>`<button class="starterChoice" data-id="${id}"><img src="${sprite(id)}" alt=""><b>Pokémon #${id}</b><small>Generation ${gen}</small></button>`).join('');
+ const buttons=[...$('starterChoices').querySelectorAll('button')];
+ for(const btn of buttons){
+   try{
+     const p=await pokemon(Number(btn.dataset.id));
+     btn.querySelector('b').textContent=p.de;
+     btn.querySelector('small').textContent='Generation '+gen+' · '+p.types.join(' / ');
+     btn.onclick=()=>{
+       selectedStarter=p;
+       $('starterChoices').querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
+       btn.classList.add('selected');
+       $('confirmStarter').disabled=false;
+       $('starterMessage').textContent=p.de+' ausgewählt. Level 5.';
+     };
+   }catch(e){btn.querySelector('small').textContent='Daten nicht geladen'}
+ }
+ $('starterMessage').textContent='Wähle eines der drei Starter-Pokémon dieser Generation.';
+}
+function confirmStarter(){
+ if(!selectedStarter)return;
+ if(!trainer)trainer={name:accountData()?.name||'Trainer',coins:500,team:[]};
+ trainer.name=trainer.name||accountData()?.name||'Trainer';
+ trainer.starter={id:selectedStarter.id,name:selectedStarter.de,level:5,moves:[],shiny:false};
+ trainer.team=[];save();renderProfile();
+}
+function renderProfile(){
+ if(!trainer||!trainer.starter){showOnboarding();return}
+ $('accountStep').classList.add('hidden');$('loginStep').classList.add('hidden');$('starterStep').classList.add('hidden');
+ $('profileExtras').classList.remove('hidden');$('profileContent').classList.remove('hidden');
+ const s=trainer.starter;
+ $('profileContent').innerHTML=`<div class="row"><div><span class="tag">Trainer</span><h2>${esc(trainer.name||'Trainer')}</h2><p>${trainer.coins||0} Münzen</p></div><img class="sprite" src="${sprite(s.id||1)}"><div><h2 id="starterName">${esc(s.name||'Starter')}</h2><div id="starterTypes">Daten werden geladen …</div><p>Level ${s.level||5}</p></div></div>`;
+ $('team').innerHTML=`<div class="row"><img class="smallSprite" src="${sprite(s.id||1)}"><div><b>${esc(s.name||'Starter')}</b><p>Level ${s.level||5}</p></div></div>`;
+ pokemon(s.id||s.name||1).then(p=>{$('starterName').textContent=p.de;$('starterTypes').innerHTML=p.types.map(t=>`<span class="tag">${t}</span>`).join('')}).catch(()=>{});
+}
 function renderDex(q=''){let a=dex.filter(x=>x.name.includes(q.toLowerCase())||String(x.id)===q).slice(0,180);$('dexList').innerHTML=a.map(x=>`<button class="dexitem" data-id="${x.id}"><img loading="lazy" src="${sprite(x.id)}"><span>#${String(x.id).padStart(4,'0')}<br>${esc(x.name)}</span></button>`).join('');$('dexList').querySelectorAll('button').forEach(b=>b.onclick=()=>showDetail(+b.dataset.id))}
 async function showDetail(id){$('detail').classList.remove('hidden');$('detail').textContent='Lade Daten …';try{let p=await pokemon(id);$('detail').innerHTML=`<div class="row"><img class="sprite" src="${p.front}"><div><h2>${esc(p.de)} #${p.id}</h2>${p.types.map(t=>`<span class="tag">${t}</span>`).join('')}<p>Fähigkeiten: ${p.abilities.map(a=>esc(a.name)+(a.hidden?' (versteckt)':'')).join(', ')}</p><p>Entwicklungskette: ${esc(chainNames(p.evolution).join(' → '))}</p></div></div><h3>Basiswerte</h3><div class="grid">${Object.entries(p.stats).map(([k,v])=>`<div>${esc(k)}: <b>${v}</b></div>`).join('')}</div><h3 style="margin-top:12px">Attacken-Lernliste</h3><p>${p.moves.length} Attacken-Einträge aus PokéAPI. Lernmethoden, Level und TM-Kompatibilität sind in den geladenen Rohdaten enthalten und werden in der nächsten Ausbaustufe als auswählbare Lernlisten dargestellt.</p>`}catch(e){$('detail').textContent='Details konnten nicht geladen werden.'}}
 $('search').oninput=e=>renderDex(e.target.value.trim());
@@ -48,5 +161,13 @@ function attack(i){let b=fight,m=b.om[i];if(!m||b.done)return;if(Math.random()*1
 function enemyTurn(){let b=fight;if(!b||b.done)return;let m=b.fm[Math.floor(Math.random()*b.fm.length)];if(!m){$('log').textContent+=' Der Gegner konnte keine Attacke einsetzen.';return}let d=damage(b.foe,b.own,m);b.h1=Math.max(0,b.h1-d);$('log').textContent=`Der Gegner setzt ${m.name} ein. ${d} Schaden!`;if(!b.h1){b.done=true;$('log').textContent+=' Dein Pokémon ist kampfunfähig.'}drawFight()}
 function page(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='box')renderBox();if(id==='trade')renderBox()}
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>page(b.dataset.page));$('start').onclick=startFight;$('leave').onclick=()=>{$('battle').classList.add('hidden');fight=null};$('tradeButton').onclick=()=>{$('tradeMsg').textContent=$('tradeName').value.trim()?'Anfrage vorbereitet. Der Versand wird nach Einrichtung des Online-Backends aktiviert.':'Bitte Trainernamen eingeben.'};
-function init(){if(trainer){trainer.starter.level=Math.max(5,Number(trainer.starter.level)||5);save()}renderProfile();initDex();$('dataStatus').textContent='Pokémon-Liste: bis zu 1.025 Arten. Einzelheiten, Entwicklungswege, Basiswerte, Fähigkeiten und Attacken werden bei Bedarf direkt aus PokéAPI geladen und zwischengespeichert.'}init();
+function init(){
+ const acc=accountData();
+ if(acc&&trainer&&trainer.starter){sessionStorage.setItem('lionstuffLoggedIn','yes')}
+ if(acc&&!trainer)trainer={name:acc.name,coins:500,starter:null,team:[]};
+ if(trainer?.starter){trainer.starter.level=Math.max(5,Number(trainer.starter.level)||5);save()}
+ $('createAccount').onclick=createAccount;$('loginButton').onclick=login;
+ $('starterGeneration').onchange=renderStarterChoices;$('confirmStarter').onclick=confirmStarter;
+ renderProfile();initDex();$('dataStatus').textContent='Pokémon-Liste: bis zu 1.025 Arten. Einzelheiten, Entwicklungswege, Basiswerte, Fähigkeiten und Attacken werden bei Bedarf direkt aus PokéAPI geladen und zwischengespeichert.'}
+init();
 </script></body></html>
