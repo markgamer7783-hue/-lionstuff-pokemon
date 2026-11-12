@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LionStuff Pokémon</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #dce8d2;
+      font-family: Arial, sans-serif;
+      color: #26352b;
+    }
+    header {
+      background: #315c48;
+      color: white;
+      padding: 22px;
+      text-align: center;
+      border-bottom: 5px solid #203d30;
+    }
+    header h1 { margin: 0; letter-spacing: 2px; }
+    header p { margin-bottom: 0; }
+    main {
+      max-width: 850px;
+      margin: 25px auto;
+      padding: 15px;
+    }
+    .panel {
+      background: #fffdf1;
+      border: 4px solid #526b50;
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 0 #a4b49b;
+    }
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    button {
+      border: 3px solid #405b45;
+      background: #d5e8c9;
+      padding: 16px;
+      border-radius: 9px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background: #b9d9a9; }
+    #message {
+      background: #263d31;
+      color: white;
+      padding: 18px;
+      border-radius: 8px;
+      min-height: 65px;
+      line-height: 1.5;
+    }
+    @media(max-width: 500px) {
+      .menu { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🌿 LIONSTUFF POKÉMON</h1>
+    <p>Dein neues Pokémon-Abenteuer!</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Willkommen, Trainer!</h2>
+      <p>Willkommen in deiner Pokémon-Welt.</p>
+      <p>Dein Abenteuer beginnt hier.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Spielmenü</h2>
+      <div class="menu">
+        <button onclick="show('Dein Trainerprofil wird vorbereitet!')">👤 Trainerprofil</button>
+        <button onclick="show('Deine Pokémon-Box wird vorbereitet!')">🎒 Pokémon-Box</button>
+        <button onclick="show('Du betrittst die Safari!')">🌿 Safari</button>
+        <button onclick="show('Der Pokédex wird vorbereitet!')">📖 Pokédex</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Abenteuer-Log</h2>
+      <div id="message">Hallo Trainer! Wähle einen Bereich aus.</div>
+    </section>
+  </main>
+
+  <script>
+    function show(message) {
+      document.getElementById("message").textContent = message;
+    }
+  </script>
+</body>
+</html>
