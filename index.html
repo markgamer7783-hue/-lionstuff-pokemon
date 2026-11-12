@@ -54,12 +54,12 @@
 <div class="grid" style="margin-top:12px"><div class="card"><b id="enemyName">Gegner</b><p id="enemyLevel">Level 5</p><div class="row">KP <div class="hp"><div id="enemyBar"></div></div><span id="enemyHP"></span></div></div><div class="card"><b id="myName">Dein Pokémon</b><p id="myLevel">Level 5</p><div class="row">KP <div class="hp"><div id="myBar"></div></div><span id="myHP"></span></div></div></div><h3>Attacke wählen</h3><div id="moves" class="moves"></div><p id="log" aria-live="polite"></p><button id="leave">Kampf verlassen</button></div></section>
 <section id="box" class="page hidden"><div class="panel"><h1>Pokémon-Box</h1><div id="boxContent"></div></div></section>
 <section id="trade" class="page hidden"><div class="panel"><h1>Tauschen</h1><p>Die Oberfläche ist vorbereitet. Echte Anfragen zwischen verschiedenen Spielern benötigen ein Online-Backend; die lokale Website kann noch keine Nachrichten an andere Geräte senden.</p><div class="grid"><div class="card"><h2>Neuer Tausch</h2><label>Trainername</label><input id="tradeName" placeholder="Name des Trainers"><label>Dein Pokémon</label><select id="tradePokemon"></select><button id="tradeButton">Tauschanfrage vorbereiten</button><p id="tradeMsg"></p></div><div class="card"><h2>Eingehende Anfragen</h2><p>Noch keine Anfragen.</p></div></div></div></section>
-<section id="dex" class="page hidden"><div class="panel"><h1>Nationaler Pokédex</h1><p id="dexStatus">Lade Liste …</p><input id="search" placeholder="Pokémon oder Pokédex-Nummer suchen"><div id="dexList" class="dexlist" style="margin-top:10px"></div><div id="detail" class="panel hidden" style="margin-top:12px"></div></div></section>
+<section id="dex" class="page hidden"><div class="panel"><h1>Nationaler Pokédex</h1><p id="dexStatus">Lade Liste …</p><input id="search" placeholder="Pokémon oder Pokédex-Nummer suchen"><div id="dexList" class="dexlist" style="margin-top:10px"></div><button id="dexMore" type="button">Weitere Pokémon laden</button><div id="detail" class="panel hidden" style="margin-top:12px"></div></div></section>
 <section id="rank" class="page hidden"><div class="panel"><h1>Ranglisten</h1><p>Online-Ranglisten kommen mit dem Mehrspieler-Backend. Dein lokaler Spielstand bleibt davon getrennt.</p></div></section>
 </main>
 <script>
 const API='https://pokeapi.co/api/v2/',KEY='lionstuffTrainerDemo',DEXKEY='lionstuffDexList',LIMIT=1025;
-const $=id=>document.getElementById(id);let trainer=readTrainer(),dex=[],cache={},fight=null,selectedStarter=null;
+const $=id=>document.getElementById(id);let trainer=readTrainer(),dex=[],cache={},fight=null,selectedStarter=null,dexShown=180;
 const ACCOUNT_KEY='lionstuffAccountDemo';
 const STARTERS={
 1:[1,4,7],2:[152,155,158],3:[252,255,258],4:[387,390,393],5:[495,498,501],6:[650,653,656],7:[722,725,728],8:[810,813,816],9:[906,909,912]
@@ -70,7 +70,16 @@ function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 async function api(path){let r=await fetch(API+path);if(!r.ok)throw Error('API '+r.status);return r.json()}
 async function cached(key,url){try{let x=JSON.parse(localStorage.getItem(key)||'null');if(x&&Date.now()-x.time<7*864e5)return x.data}catch(e){}let r=await fetch(url);if(!r.ok)throw Error('Fetch fehlgeschlagen');let d=await r.json();try{localStorage.setItem(key,JSON.stringify({time:Date.now(),data:d}))}catch(e){}return d}
 const sprite=(id,back=false)=>`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${back?'back/':''}${id}.png`;
-async function pokemon(id){let k=String(id).toLowerCase();if(cache[k])return cache[k];let d=await api('pokemon/'+k),s=await api('pokemon-species/'+d.id),chain=await api(s.evolution_chain.url);let p={id:d.id,name:d.name,de:s.names.find(x=>x.language.name==='de')?.name||d.name,types:d.types.sort((a,b)=>a.slot-b.slot).map(x=>x.type.name),stats:Object.fromEntries(d.stats.map(x=>[x.stat.name,x.base_stat])),abilities:d.abilities.map(x=>({name:x.ability.name,hidden:x.is_hidden})),moves:d.moves,sprite:d.sprites.front_default,back:d.sprites.back_default||sprite(d.id,true),front:d.sprites.front_default||sprite(d.id),species:s,evolution:chain.chain};cache[k]=cache[d.id]=p;return p}
+async function pokemon(id){
+ let k=String(id).toLowerCase();if(cache[k])return cache[k];
+ const d=await api('pokemon/'+k);let species=null,evolution=null;
+ try{species=await api('pokemon-species/'+d.id);if(species.evolution_chain?.url){try{let r=await fetch(species.evolution_chain.url);if(r.ok)evolution=(await r.json()).chain}catch(e){}}}catch(e){}
+ const official=d.sprites.other?.['official-artwork']?.front_default;
+ const front=d.sprites.front_default||official||sprite(d.id);
+ const back=d.sprites.back_default||official||front;
+ const p={id:d.id,name:d.name,de:species?.names?.find(x=>x.language.name==='de')?.name||d.name,types:d.types.sort((a,b)=>a.slot-b.slot).map(x=>x.type.name),stats:Object.fromEntries(d.stats.map(x=>[x.stat.name,x.base_stat])),abilities:d.abilities.map(x=>({name:x.ability.name,hidden:x.is_hidden})),moves:d.moves||[],sprite:front,back,front,species,evolution};
+ cache[k]=cache[d.id]=p;return p
+}
 function chainNames(n,a=[]){a.push(n.species.name);n.evolves_to.forEach(x=>chainNames(x,a));return a}
 async function initDex(){try{let d=await cached(DEXKEY,API+'pokemon?limit='+LIMIT+'&offset=0');dex=d.results.slice(0,LIMIT).map((x,i)=>({id:i+1,name:x.name}));$('dexStatus').textContent=dex.length+' Pokémon aus der PokéAPI geladen. Details werden beim Öffnen geladen.';renderDex()}catch(e){$('dexStatus').textContent='PokéAPI nicht erreichbar. Bitte später neu laden.'}}
 function accountData(){try{return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'null')}catch(e){return null}}
@@ -108,32 +117,27 @@ async function login(){
 }
 async function renderStarterChoices(){
  const gen=Number($('starterGeneration').value),ids=STARTERS[gen];
- selectedStarter=null;
- $('confirmStarter').disabled=true;
- $('starterMessage').textContent='Lade Pokémon-Sprites …';
- $('starterChoices').innerHTML=ids.map(id=>`<button class="starterChoice" data-id="${id}"><img src="${sprite(id)}" alt=""><b>Pokémon #${id}</b><small>Generation ${gen}</small></button>`).join('');
+ selectedStarter=null;$('confirmStarter').disabled=true;
+ $('starterMessage').textContent='Wähle eines der drei Pokémon. Namen und Typen werden nachgeladen.';
+ $('starterChoices').innerHTML=ids.map(id=>`<button type="button" class="starterChoice" data-id="${id}"><img src="${sprite(id)}" alt="Pokémon #${id}"><b>Pokémon #${id}</b><small>Generation ${gen}</small></button>`).join('');
  const buttons=[...$('starterChoices').querySelectorAll('button')];
+ buttons.forEach(btn=>btn.onclick=()=>{
+   const id=Number(btn.dataset.id);
+   selectedStarter={id,name:btn.querySelector('b').textContent};
+   $('starterChoices').querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
+   btn.classList.add('selected');$('confirmStarter').disabled=false;
+   $('starterMessage').textContent=selectedStarter.name+' ausgewählt. Level 5.';
+ });
  for(const btn of buttons){
-   try{
-     const p=await pokemon(Number(btn.dataset.id));
-     btn.querySelector('b').textContent=p.de;
-     btn.querySelector('small').textContent='Generation '+gen+' · '+p.types.join(' / ');
-     btn.onclick=()=>{
-       selectedStarter=p;
-       $('starterChoices').querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
-       btn.classList.add('selected');
-       $('confirmStarter').disabled=false;
-       $('starterMessage').textContent=p.de+' ausgewählt. Level 5.';
-     };
-   }catch(e){btn.querySelector('small').textContent='Daten nicht geladen'}
+   try{const p=await pokemon(Number(btn.dataset.id));btn.querySelector('b').textContent=p.de;btn.querySelector('small').textContent='Generation '+gen+' · '+p.types.map(t=>typeDE[t]||t).join(' / ');btn.querySelector('img').src=p.front;if(selectedStarter?.id===p.id)selectedStarter.name=p.de}
+   catch(e){btn.querySelector('small').textContent='Daten gerade nicht abrufbar – Auswahl bleibt möglich.'}
  }
- $('starterMessage').textContent='Wähle eines der drei Starter-Pokémon dieser Generation.';
 }
 function confirmStarter(){
  if(!selectedStarter)return;
  if(!trainer)trainer={name:accountData()?.name||'Trainer',coins:500,team:[]};
  trainer.name=trainer.name||accountData()?.name||'Trainer';
- trainer.starter={id:selectedStarter.id,name:selectedStarter.de,level:5,moves:[],shiny:false};
+ trainer.starter={id:selectedStarter.id,name:selectedStarter.name||'Starter',level:5,moves:[],shiny:false};
  trainer.team=[];save();renderProfile();
 }
 function renderProfile(){
@@ -141,19 +145,30 @@ function renderProfile(){
  $('accountStep').classList.add('hidden');$('loginStep').classList.add('hidden');$('starterStep').classList.add('hidden');
  $('profileExtras').classList.remove('hidden');$('profileContent').classList.remove('hidden');
  const s=trainer.starter;
- $('profileContent').innerHTML=`<div class="row"><div><span class="tag">Trainer</span><h2>${esc(trainer.name||'Trainer')}</h2><p>${trainer.coins||0} Münzen</p></div><img class="sprite" src="${sprite(s.id||1)}"><div><h2 id="starterName">${esc(s.name||'Starter')}</h2><div id="starterTypes">Daten werden geladen …</div><p>Level ${s.level||5}</p></div></div>`;
+ $('profileContent').innerHTML=`<div class="row"><div><span class="tag">Trainer</span><h2>${esc(trainer.name||'Trainer')}</h2><p>${trainer.coins||0} Münzen</p><button id="logoutButton" type="button">Abmelden</button></div><img class="sprite" src="${sprite(s.id||1)}"><div><h2 id="starterName">${esc(s.name||'Starter')}</h2><div id="starterTypes">Daten werden geladen …</div><p>Level ${s.level||5}</p></div></div>`;
  $('team').innerHTML=`<div class="row"><img class="smallSprite" src="${sprite(s.id||1)}"><div><b>${esc(s.name||'Starter')}</b><p>Level ${s.level||5}</p></div></div>`;
- pokemon(s.id||s.name||1).then(p=>{$('starterName').textContent=p.de;$('starterTypes').innerHTML=p.types.map(t=>`<span class="tag">${t}</span>`).join('')}).catch(()=>{});
+ $('logoutButton').onclick=()=>{sessionStorage.removeItem('lionstuffLoggedIn');page('profile');showOnboarding()};pokemon(s.id||s.name||1).then(p=>{$('starterName').textContent=p.de;$('starterTypes').innerHTML=p.types.map(t=>`<span class="tag">${typeDE[t]||t}</span>`).join('')}).catch(()=>{});
 }
-function renderDex(q=''){let a=dex.filter(x=>x.name.includes(q.toLowerCase())||String(x.id)===q).slice(0,180);$('dexList').innerHTML=a.map(x=>`<button class="dexitem" data-id="${x.id}"><img loading="lazy" src="${sprite(x.id)}"><span>#${String(x.id).padStart(4,'0')}<br>${esc(x.name)}</span></button>`).join('');$('dexList').querySelectorAll('button').forEach(b=>b.onclick=()=>showDetail(+b.dataset.id))}
+function renderDex(q=''){let all=dex.filter(x=>x.name.includes(q.toLowerCase())||String(x.id)===q),a=all.slice(0,dexShown);$('dexList').innerHTML=a.map(x=>`<button class="dexitem" data-id="${x.id}"><img loading="lazy" src="${sprite(x.id)}"><span>#${String(x.id).padStart(4,'0')}<br>${esc(x.name)}</span></button>`).join('');$('dexList').querySelectorAll('button').forEach(b=>b.onclick=()=>showDetail(+b.dataset.id));$('dexMore').classList.toggle('hidden',a.length>=all.length);$('dexMore').textContent=`Weitere Pokémon laden (${all.length-a.length} übrig)`}
 async function showDetail(id){$('detail').classList.remove('hidden');$('detail').textContent='Lade Daten …';try{let p=await pokemon(id);$('detail').innerHTML=`<div class="row"><img class="sprite" src="${p.front}"><div><h2>${esc(p.de)} #${p.id}</h2>${p.types.map(t=>`<span class="tag">${t}</span>`).join('')}<p>Fähigkeiten: ${p.abilities.map(a=>esc(a.name)+(a.hidden?' (versteckt)':'')).join(', ')}</p><p>Entwicklungskette: ${esc(chainNames(p.evolution).join(' → '))}</p></div></div><h3>Basiswerte</h3><div class="grid">${Object.entries(p.stats).map(([k,v])=>`<div>${esc(k)}: <b>${v}</b></div>`).join('')}</div><h3 style="margin-top:12px">Attacken-Lernliste</h3><p>${p.moves.length} Attacken-Einträge aus PokéAPI. Lernmethoden, Level und TM-Kompatibilität sind in den geladenen Rohdaten enthalten und werden in der nächsten Ausbaustufe als auswählbare Lernlisten dargestellt.</p>`}catch(e){$('detail').textContent='Details konnten nicht geladen werden.'}}
-$('search').oninput=e=>renderDex(e.target.value.trim());
+$('search').oninput=e=>{dexShown=180;renderDex(e.target.value.trim())};$('dexMore').onclick=()=>{dexShown+=180;renderDex($('search').value.trim())};
 function renderBox(){if(!trainer){$('boxContent').textContent='Bitte zuerst Trainer erstellen.';return}let s=trainer.starter||{};$('boxContent').innerHTML=`<div class="row card"><img class="sprite" src="${sprite(s.id||1)}"><div><h2>${esc(s.name||'Starter')}</h2><span class="tag">Level ${s.level||5}</span><p>Dein vorhandener Starter-Spielstand bleibt erhalten.</p></div></div>`;$('tradePokemon').innerHTML=`<option>${esc(s.name||'Starter')}</option>`}
 const chart={normal:{rock:.5,ghost:0,steel:.5},fire:{fire:.5,water:.5,grass:2,ice:2,bug:2,rock:.5,dragon:.5,steel:2},water:{fire:2,water:.5,grass:.5,ground:2,rock:2,dragon:.5},electric:{water:2,electric:.5,grass:.5,ground:0,flying:2,dragon:.5},grass:{fire:.5,water:2,grass:.5,poison:.5,ground:2,flying:.5,bug:.5,rock:2,dragon:.5,steel:.5},ice:{fire:.5,water:.5,grass:2,ice:.5,ground:2,flying:2,dragon:2,steel:.5},fighting:{normal:2,ice:2,poison:.5,flying:.5,psychic:.5,bug:.5,rock:2,ghost:0,dark:2,steel:2,fairy:.5},poison:{grass:2,poison:.5,ground:.5,rock:.5,ghost:.5,steel:0,fairy:2},ground:{fire:2,electric:2,grass:.5,poison:2,flying:0,bug:.5,rock:2,steel:2},flying:{electric:.5,grass:2,fighting:2,bug:2,rock:.5,steel:.5},psychic:{fighting:2,poison:2,psychic:.5,dark:0,steel:.5},bug:{fire:.5,grass:2,fighting:.5,poison:.5,flying:.5,psychic:2,ghost:.5,dark:2,steel:.5,fairy:.5},rock:{fire:2,ice:2,fighting:.5,ground:.5,flying:2,bug:2,steel:.5},ghost:{normal:0,psychic:2,ghost:2,dark:.5},dragon:{dragon:2,steel:.5,fairy:0},dark:{fighting:.5,psychic:2,ghost:2,dark:.5,fairy:.5},steel:{fire:.5,water:.5,electric:.5,ice:2,rock:2,fairy:2,steel:.5},fairy:{fire:.5,fighting:2,poison:.5,dragon:2,dark:2,steel:.5}};
 const typeDE={normal:'Normal',fire:'Feuer',water:'Wasser',electric:'Elektro',grass:'Pflanze',ice:'Eis',fighting:'Kampf',poison:'Gift',ground:'Boden',flying:'Flug',psychic:'Psycho',bug:'Käfer',rock:'Gestein',ghost:'Geist',dragon:'Drache',dark:'Unlicht',steel:'Stahl',fairy:'Fee'};
-async function movesAt5(p){let a=[];for(let m of p.moves){let v=m.version_group_details.filter(x=>x.move_learn_method.name==='level-up'&&x.version_group.name==='scarlet-violet'&&x.level_learned_at<=5).sort((x,y)=>y.level_learned_at-x.level_learned_at)[0];if(v)a.push({url:m.move.url,level:v.level_learned_at})}a.sort((x,y)=>x.level-y.level);return Promise.all(a.slice(-4).map(async x=>{let d=await api(x.url.replace(API,''));return{name:d.names.find(n=>n.language.name==='de')?.name||d.name,type:d.type.name,power:d.power||0,pp:d.pp||20,accuracy:d.accuracy||100,category:d.damage_class.name}}))}
+async function movesAt5(p){
+ const candidates=[];
+ for(const m of p.moves){
+  const eligible=(m.version_group_details||[]).filter(x=>x.move_learn_method.name==='level-up'&&x.level_learned_at<=5);
+  const sv=eligible.filter(x=>x.version_group.name==='scarlet-violet');
+  const chosen=(sv.length?sv:eligible).sort((a,b)=>b.level_learned_at-a.level_learned_at)[0];
+  if(chosen)candidates.push({url:m.move.url,level:chosen.level_learned_at,name:m.move.name});
+ }
+ candidates.sort((a,b)=>a.level-b.level);
+ const unique=[...new Map(candidates.map(x=>[x.name,x])).values()].slice(-4);
+ return Promise.all(unique.map(async x=>{const d=await api(x.url.replace(API,''));return{name:d.names?.find(n=>n.language.name==='de')?.name||d.name,type:d.type.name,power:d.power||0,pp:d.pp||20,accuracy:d.accuracy??100,category:d.damage_class.name}}));
+}
 function hpStat(p,l){return Math.floor(((2*p.stats.hp+31)*l)/100)+l+10}function stat(p,k,l){return Math.floor((2*p.stats[k]+31)*l/100)+5}
-async function startFight(){if(!trainer){alert('Bitte zuerst Trainer erstellen.');return} $('battle').classList.remove('hidden');$('log').textContent='Gegner wird gesucht …';try{let own=await pokemon(trainer.starter.id||1),ids=[1,4,7,25,39,52,133,152,155,158,252,255,258,387,390,393,495,498,501,650,653,656,722,725,728,810,813,816,906,909,912],foe;do{foe=await pokemon(ids[Math.floor(Math.random()*ids.length)])}while(foe.id===own.id);let om=await movesAt5(own),fm=await movesAt5(foe),h1=hpStat(own,5),h2=hpStat(foe,5);fight={own,foe,om,fm,h1,h2,max1:h1,max2:h2,done:false};$('enemyTrainer').textContent='Zufallstrainer';$('myTrainer').textContent=trainer.name;$('enemySprite').src=foe.front;$('mySprite').src=foe.back;$('enemyName').textContent=foe.de;$('myName').textContent=own.de;$('log').textContent=`Der gegnerische Trainer schickt ${foe.de} in den Kampf!`;drawFight()}catch(e){$('log').textContent='Kampfdaten konnten nicht geladen werden. Bitte Verbindung prüfen.'}}
+async function startFight(){if(!trainer){alert('Bitte zuerst Trainer erstellen.');return} $('battle').classList.remove('hidden');$('log').textContent='Gegner wird gesucht …';try{let own=await pokemon(trainer.starter.id||1),ids=[1,4,7,25,39,52,133,152,155,158,252,255,258,387,390,393,495,498,501,650,653,656,722,725,728,810,813,816,906,909,912],foe;do{foe=await pokemon(ids[Math.floor(Math.random()*ids.length)])}while(foe.id===own.id);let om=await movesAt5(own),fm=await movesAt5(foe),h1=hpStat(own,5),h2=hpStat(foe,5);if(!om.length||!fm.length)throw Error('Keine passenden Level-5-Attacken in der PokéAPI-Lernliste gefunden.');fight={own,foe,om,fm,h1,h2,max1:h1,max2:h2,done:false};$('enemyTrainer').textContent='Zufallstrainer';$('myTrainer').textContent=trainer.name;$('enemySprite').src=foe.front;$('mySprite').src=foe.back;$('enemyName').textContent=foe.de;$('myName').textContent=own.de;$('log').textContent=`Der gegnerische Trainer schickt ${foe.de} in den Kampf!`;drawFight()}catch(e){console.error('Kampf konnte nicht geladen werden:',e);$('log').textContent='Kampfdaten konnten nicht geladen werden: '+(e.message||'Unbekannter Fehler')}}
 function eff(t,defs){return defs.reduce((v,d)=>v*(chart[t]?.[d]??1),1)}
 function drawFight(){let b=fight;$('myBar').style.width=100*b.h1/b.max1+'%';$('enemyBar').style.width=100*b.h2/b.max2+'%';$('myHP').textContent=b.h1+'/'+b.max1;$('enemyHP').textContent=b.h2+'/'+b.max2;$('moves').innerHTML=b.om.map((m,i)=>`<button class="move type-${m.type}" data-i="${i}" ${b.done?'disabled':''}><strong>${esc(m.name)}</strong><span>${typeDE[m.type]||m.type} · AP ${m.pp}/${m.pp}</span></button>`).join('');$('moves').querySelectorAll('button').forEach(x=>x.onclick=()=>attack(+x.dataset.i));$('bstate').textContent=b.done?'Kampf beendet':'Level 5'}
 function damage(att,def,m){if(!m.power)return 0;let a=stat(att,m.category==='physical'?'attack':'special-attack',5),d=stat(def,m.category==='physical'?'defense':'special-defense',5);return Math.max(1,Math.floor(((((2*5/5+2)*m.power*a/d)/50)+2)*(.85+Math.random()*.15)*eff(m.type,def.types)))}
