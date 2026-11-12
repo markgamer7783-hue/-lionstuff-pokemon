@@ -1,101 +1,112 @@
 
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LionStuff Pokémon</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #dce8d2;
-      font-family: Arial, sans-serif;
-      color: #26352b;
-    }
-    header {
-      background: #315c48;
-      color: white;
-      padding: 22px;
-      text-align: center;
-      border-bottom: 5px solid #203d30;
-    }
-    header h1 { margin: 0; letter-spacing: 2px; }
-    header p { margin-bottom: 0; }
-    main {
-      max-width: 850px;
-      margin: 25px auto;
-      padding: 15px;
-    }
-    .panel {
-      background: #fffdf1;
-      border: 4px solid #526b50;
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 0 #a4b49b;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-    button {
-      border: 3px solid #405b45;
-      background: #d5e8c9;
-      padding: 16px;
-      border-radius: 9px;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover { background: #b9d9a9; }
-    #message {
-      background: #263d31;
-      color: white;
-      padding: 18px;
-      border-radius: 8px;
-      min-height: 65px;
-      line-height: 1.5;
-    }
-    @media(max-width: 500px) {
-      .menu { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>🌿 LIONSTUFF POKÉMON</h1>
-    <p>Dein neues Pokémon-Abenteuer!</p>
-  </header>
-
-  <main>
-    <section class="panel">
-      <h2>Willkommen, Trainer!</h2>
-      <p>Willkommen in deiner Pokémon-Welt.</p>
-      <p>Dein Abenteuer beginnt hier.</p>
-    </section>
-
-    <section class="panel">
-      <h2>Spielmenü</h2>
-      <div class="menu">
-        <button onclick="show('Dein Trainerprofil wird vorbereitet!')">👤 Trainerprofil</button>
-        <button onclick="show('Deine Pokémon-Box wird vorbereitet!')">🎒 Pokémon-Box</button>
-        <button onclick="show('Du betrittst die Safari!')">🌿 Safari</button>
-        <button onclick="show('Der Pokédex wird vorbereitet!')">📖 Pokédex</button>
-      </div>
-    </section>
-
-    <section class="panel">
-      <h2>Abenteuer-Log</h2>
-      <div id="message">Hallo Trainer! Wähle einen Bereich aus.</div>
-    </section>
-  </main>
-
-  <script>
-    function show(message) {
-      document.getElementById("message").textContent = message;
-    }
-  </script>
-</body>
-</html>
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LionStuff Pokémon – Trainer erstellen</title>
+<style>
+:root{--ink:#18352b;--green:#28734f;--paper:#f7f5df;--line:#a9c9a7;--gold:#f5c85b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(#c9e8c8,#f5f2d9);color:var(--ink);font-family:Verdana,Arial,sans-serif}
+header{background:#24583f;color:white;padding:18px 14px;text-align:center;border-bottom:5px solid #173d2c}header h1{margin:0;font-size:clamp(22px,4vw,34px)}header p{margin:8px 0 0;font-size:13px}
+main{max-width:1050px;margin:22px auto;padding:0 14px 40px}.panel{background:var(--paper);border:4px solid var(--green);border-radius:12px;padding:18px;margin:16px 0;box-shadow:0 5px 0 #9fbd94}
+h2{margin:0 0 14px;color:#24583f;font-size:20px}.hint{font-size:13px;line-height:1.5;color:#456252}
+label{display:block;font-weight:bold;font-size:13px;margin:12px 0 6px}input,select{width:100%;padding:12px;border:2px solid var(--line);border-radius:8px;font-size:16px;background:white;color:var(--ink)}
+button{cursor:pointer;border:2px solid #19432f;border-radius:8px;background:#347d55;color:white;padding:11px 15px;font-weight:bold;font-size:14px;box-shadow:0 3px 0 #19432f}
+button:hover{filter:brightness(1.08)}button:disabled{opacity:.45;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.choice{background:#fff;border:2px solid var(--line);border-radius:10px;padding:8px;text-align:center;color:var(--ink);box-shadow:none;min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.choice.selected{border:3px solid #d69d19;background:#fff6cf;box-shadow:0 0 0 2px #f5d779}
+.sprite-frame{height:92px;width:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(#e9f4df,#d7e8cd);border-radius:7px}
+.trainer-sprite{max-height:88px;max-width:100%;width:auto;object-fit:contain;image-rendering:pixelated}
+.choice small{color:#58705e;font-weight:normal}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.hidden{display:none!important}
+.notice{background:#fff2c9;border:1px solid #d9b65d;border-radius:8px;padding:11px;font-size:12px;line-height:1.5}
+#profileCard{display:grid;grid-template-columns:115px 1fr;gap:15px;align-items:center}.avatar-big{background:#e7f1dc;border-radius:10px;padding:8px;display:flex;justify-content:center;align-items:center;min-height:120px}
+.avatar-big img{max-width:100%;max-height:110px;image-rendering:pixelated}.mon{width:76px;height:76px;object-fit:contain;image-rendering:pixelated}
+.tag{display:inline-block;background:#e4efdc;padding:4px 8px;border-radius:20px;font-size:11px;margin:3px}
+footer{text-align:center;font-size:11px;color:#57705d;padding:15px}
+</style></head><body>
+<header><h1>★ LIONSTUFF POKÉMON ★</h1><p>Dein Abenteuer beginnt hier, Trainer!</p></header>
+<main>
+<section id="create" class="panel">
+<h2>1. Erstelle deinen Trainer</h2><p class="hint">Gib deinen Trainernamen ein und wähle eine Figur aus der Sprite-Galerie aus.</p>
+<label for="trainerName">Trainername</label><input id="trainerName" maxlength="18" placeholder="Dein Trainername">
+<label for="password">Passwort (nur für diese Vorschau)</label><input id="password" type="password" minlength="6" placeholder="Mindestens 6 Zeichen">
+<p class="notice">Vorschau-Version: Das Profil wird nur auf diesem Gerät gespeichert. Es gibt noch keine sichere Online-Anmeldung. Bitte hier kein echtes oder wichtiges Passwort verwenden.</p>
+<label>Wähle deinen Trainer-Sprite</label>
+<p class="hint">Klicke auf eine Figur. Du kannst zwischen bekannten Charakteren und Trainerklassen wählen.</p>
+<div id="trainerChoices" class="grid"></div>
+<div class="actions"><button id="toStarters" type="button">Weiter zur Starter-Auswahl →</button></div>
+</section>
+<section id="starterStep" class="panel hidden">
+<h2>2. Wähle dein Starter-Pokémon</h2><p class="hint">Du darfst genau ein Starter-Pokémon aus einer der neun Generationen wählen.</p>
+<label for="generation">Generation auswählen</label><select id="generation">
+<option value="1">Generation 1 – Kanto</option><option value="2">Generation 2 – Johto</option><option value="3">Generation 3 – Hoenn</option><option value="4">Generation 4 – Sinnoh</option><option value="5">Generation 5 – Einall</option><option value="6">Generation 6 – Kalos</option><option value="7">Generation 7 – Alola</option><option value="8">Generation 8 – Galar</option><option value="9">Generation 9 – Paldea</option></select>
+<div id="starterChoices" class="grid" style="margin-top:14px"></div>
+<div class="actions"><button id="back" type="button">← Zurück</button><button id="finish" type="button" disabled>Abenteuer beginnen!</button></div>
+</section>
+<section id="profile" class="panel hidden"><h2>★ Dein Trainerprofil ★</h2>
+<div id="profileCard"><div id="profileAvatar" class="avatar-big"></div><div><h3 id="profileName" style="margin:0 0 8px"></h3><span class="tag">Level 1</span><span class="tag">Neuer Trainer</span><p class="hint" id="profileStarter"></p></div></div>
+<hr style="border:0;border-top:2px solid #c8d9bd;margin:16px 0"><p><b>Pokémon gefangen:</b> 1 (dein Starter)</p><p><b>Spielmünzen:</b> 500</p>
+<p class="hint">Weitere Funktionen wie Safari, Pokémon-Box und Online-Login ergänzen wir später.</p><div class="actions"><button id="reset" type="button">Neuen Trainer erstellen</button></div></section>
+<footer>Fan-Projekt • Frühe Spielversion • Trainerbilder: Pokémon Showdown-Sprite-Sammlung; Rechte und Credits liegen bei den jeweiligen Urhebern</footer>
+</main>
+<script>
+const base='https://play.pokemonshowdown.com/sprites/trainers/';
+const trainers=[
+ ['Red – Kanto','red-gen1.png','Hauptfigur • Generation 1'],
+ ['Red – Johto','red-gen2.png','Hauptfigur • Generation 2'],
+ ['Blue','blue-gen1.png','Rivale • Kanto'],
+ ['Ash','ash.png','Anime-Trainer'],
+ ['Professor Eich','oak-gen1.png','Professor • Kanto'],
+ ['Lucas','lucas.png','Hauptfigur • Sinnoh'],
+ ['Lucia','dawn.png','Hauptfigur • Sinnoh'],
+ ['Schuljunge','schoolkid-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Schülerin','schoolkidf-gen4.png','Trainerklasse • Sinnoh'],
+ ['Schwimmer','swimmer-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Schwimmerin','swimmerf-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Käfersammler','bugcatcher-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Wanderer','hiker-gen4.png','Trainerklasse • Sinnoh'],
+ ['Angler','fisherman-gen4.png','Trainerklasse • Sinnoh'],
+ ['Ass-Trainer','acetrainer-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Pokémon-Züchter','pokemonbreeder-gen4.png','Trainerklasse • Sinnoh'],
+ ['Pokémon-Ranger','pokemonranger-gen4.png','Trainerklasse • Sinnoh'],
+ ['Gentleman','gentleman-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Kämpfer','blackbelt-gen4dp.png','Trainerklasse • Sinnoh'],
+ ['Forscher','scientist-gen4dp.png','Trainerklasse • Sinnoh']
+];
+let chosenTrainer=trainers[0],chosenStarter=null;
+const $=id=>document.getElementById(id);
+trainers.forEach((t,i)=>{
+ const b=document.createElement('button');b.type='button';b.className='choice'+(i===0?' selected':'');b.dataset.index=i;
+ const frame=document.createElement('div');frame.className='sprite-frame';
+ const img=document.createElement('img');img.className='trainer-sprite';img.src=base+t[1];img.alt=t[0];img.loading='lazy';
+ img.onerror=()=>{frame.innerHTML='<small>Bild konnte nicht geladen werden</small>'};
+ frame.append(img);
+ const name=document.createElement('b');name.textContent=t[0];
+ const sub=document.createElement('small');sub.textContent=t[2];
+ b.append(frame,name,sub);b.addEventListener('click',()=>{
+  chosenTrainer=t;document.querySelectorAll('#trainerChoices .choice').forEach(x=>x.classList.toggle('selected',x===b));
+ });$('trainerChoices').append(b);
+});
+const starters={
+1:[['Bisasam',1,'Pflanze / Gift'],['Glumanda',4,'Feuer'],['Schiggy',7,'Wasser']],
+2:[['Endivie',152,'Pflanze'],['Feurigel',155,'Feuer'],['Karnimani',158,'Wasser']],
+3:[['Geckarbor',252,'Pflanze'],['Flemmli',255,'Feuer'],['Hydropi',258,'Wasser']],
+4:[['Chelast',387,'Pflanze'],['Panflam',390,'Feuer'],['Plinfa',393,'Wasser']],
+5:[['Serpifeu',495,'Pflanze'],['Floink',498,'Feuer'],['Ottaro',501,'Wasser']],
+6:[['Igamaro',650,'Pflanze'],['Fynx',653,'Feuer'],['Froxy',656,'Wasser']],
+7:[['Bauz',722,'Pflanze / Flug'],['Flamiau',725,'Feuer'],['Robball',728,'Wasser']],
+8:[['Chimpep',810,'Pflanze'],['Hopplo',813,'Feuer'],['Memmeon',816,'Wasser']],
+9:[['Felori',906,'Pflanze'],['Krokel',909,'Feuer'],['Kwaks',912,'Wasser']]};
+function renderStarters(){chosenStarter=null;$('finish').disabled=true;$('starterChoices').innerHTML='';
+ starters[$('generation').value].forEach(([name,id,type])=>{
+  const b=document.createElement('button');b.type='button';b.className='choice';
+  const img=document.createElement('img');img.className='mon';img.alt=name;img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+  const title=document.createElement('b');title.textContent=name;const sub=document.createElement('small');sub.textContent=type;
+  b.append(img,title,sub);b.addEventListener('click',()=>{chosenStarter={name,id,type,generation:$('generation').value};document.querySelectorAll('#starterChoices .choice').forEach(x=>x.classList.toggle('selected',x===b));$('finish').disabled=false});
+  $('starterChoices').append(b);
+ });}
+$('toStarters').onclick=()=>{const name=$('trainerName').value.trim(),pw=$('password').value;if(!name){alert('Bitte gib zuerst einen Trainernamen ein.');return}if(pw.length<6){alert('Bitte gib ein Test-Passwort mit mindestens 6 Zeichen ein.');return}$('create').classList.add('hidden');$('starterStep').classList.remove('hidden');renderStarters();window.scrollTo(0,0)};
+$('generation').onchange=renderStarters;
+$('back').onclick=()=>{$('starterStep').classList.add('hidden');$('create').classList.remove('hidden')};
+$('finish').onclick=()=>{if(!chosenStarter)return;const profile={name:$('trainerName').value.trim(),trainer:chosenTrainer,starter:chosenStarter,created:new Date().toISOString()};localStorage.setItem('lionstuffTrainerDemo',JSON.stringify(profile));$('profileAvatar').innerHTML=`<img src="${base+profile.trainer[1]}" alt="">`;$('profileName').textContent=profile.name;$('profileStarter').textContent=`Starter-Pokémon: ${profile.starter.name} • Generation ${profile.starter.generation} • ${profile.starter.type}`;$('starterStep').classList.add('hidden');$('profile').classList.remove('hidden');window.scrollTo(0,0)};
+$('reset').onclick=()=>{localStorage.removeItem('lionstuffTrainerDemo');$('profile').classList.add('hidden');$('create').classList.remove('hidden');$('trainerName').value='';$('password').value='';chosenTrainer=trainers[0];document.querySelectorAll('#trainerChoices .choice').forEach((x,i)=>x.classList.toggle('selected',i===0));};
+</script></body></html>
