@@ -1,21 +1,4 @@
-// Gespeicherten Trainer beim Öffnen der Seite wieder anzeigen
-const savedTrainer = localStorage.getItem('lionstuffTrainerDemo');
 
-if (savedTrainer) {
-  const p = JSON.parse(savedTrainer);
-
-  $('profileAvatar').innerHTML =
-    `<img src="${base + p.trainer[1]}" alt="">`;
-
-  $('profileName').textContent = p.name;
-
-  $('profileStarter').textContent =
-    `Starter-Pokémon: ${p.starter.name} • Generation ${p.starter.generation} • ${p.starter.type}`;
-
-  $('create').classList.add('hidden');
-  $('starterStep').classList.add('hidden');
-  $('profile').classList.remove('hidden');
-}
 <!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LionStuff Pokémon – Trainer erstellen</title>
